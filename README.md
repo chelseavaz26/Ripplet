@@ -2,7 +2,7 @@
 
 **AI-driven social media analytics — sentiment, demographics, trends, and influence, from one shared dataset.**
 
-Built for SIH 2026, Problem Statement: *Social Media Analytics*.
+Built for SIH 2026, Problem Statement: *Social Media Analytics*, Problem Statement ID: *26152* .
 
 ---
 
