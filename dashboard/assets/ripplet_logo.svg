@@ -1,0 +1,13 @@
+<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" role="img">
+<title>Ripplet logo</title>
+<desc>Concentric indigo ripple rings on a soft lavender disc with a dark navy core dot and a faint vertical axis line, symbolizing outward-spreading influence and sentiment.</desc>
+<line x1="256" y1="0" x2="256" y2="512" stroke="#9696AF" stroke-width="1.5" stroke-opacity="0.5"/>
+<circle cx="256" cy="256" r="236" fill="#E3E4F8"/>
+<circle cx="256" cy="256" r="197.1" fill="none" stroke="#5B54D6" stroke-width="3.5"/>
+<circle cx="256" cy="256" r="166.6" fill="none" stroke="#5B54D6" stroke-width="3.5"/>
+<circle cx="256" cy="256" r="136.1" fill="none" stroke="#5B54D6" stroke-width="3.5"/>
+<circle cx="256" cy="256" r="105.7" fill="none" stroke="#5B54D6" stroke-width="3.5"/>
+<circle cx="256" cy="256" r="75.2" fill="none" stroke="#5B54D6" stroke-width="3.5"/>
+<circle cx="256" cy="256" r="38.4" fill="none" stroke="#5B54D6" stroke-width="3.5"/>
+<circle cx="256" cy="256" r="21.5" fill="#100F2E"/>
+</svg>
