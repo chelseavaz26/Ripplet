@@ -250,7 +250,7 @@ def render_tweet_card(
     """
     u_id = html.escape(str(row.get("user_id", "unknown")))
     raw_text = str(row.get("text", ""))
-    clean_text = html.escape(raw_text).replace("\n", "<br>")
+    clean_text = html.escape(raw_text).replace("\r\n", "<br>").replace("\n", "<br>").replace("\r", "<br>")
     ts_val = pd.to_datetime(row.get("timestamp"))
     ts_str = ts_val.strftime("%Y-%m-%d %H:%M") if pd.notnull(ts_val) else ""
 
@@ -279,46 +279,43 @@ def render_tweet_card(
     context_html = ""
     if context_label:
         context_html = (
-            f'  <div style="font-size: 0.88rem; color: #475569; font-weight: 600; margin-bottom: 6px;">\n'
-            f'    {html.escape(context_label)}:\n'
-            f'  </div>\n'
+            f'<div style="font-size: 0.88rem; color: #475569; font-weight: 600; margin-bottom: 6px;">'
+            f'{html.escape(context_label)}:</div>'
         )
 
     # Optional matched trending terms
     trends_html = ""
     if matched_trends is not None:
         if matched_trends:
-            pills = "".join(f'<span class="trend-pill">#{html.escape(t)}</span> ' for t in matched_trends)
-            trends_content = pills.strip()
+            pills = " ".join(f'<span class="trend-pill">#{html.escape(t)}</span>' for t in matched_trends)
+            trends_content = pills
         else:
             trends_content = '<span style="color: #94A3B8; font-size: 0.88rem;">None in this specific tweet</span>'
         trends_html = (
-            f'  <div style="margin-top: 10px; padding-top: 8px; border-top: 1px dashed #E2E8F0;">\n'
-            f'    <span style="font-size: 0.85rem; font-weight: 700; color: #334155; margin-right: 6px;">Matched Trending Terms:</span>\n'
-            f'    {trends_content}\n'
-            f'  </div>\n'
+            f'<div style="margin-top: 10px; padding-top: 8px; border-top: 1px dashed #E2E8F0;">'
+            f'<span style="font-size: 0.85rem; font-weight: 700; color: #334155; margin-right: 6px;">Matched Trending Terms:</span>'
+            f'{trends_content}</div>'
         )
 
-    # Flush-left HTML string without leading indentation to prevent CommonMark indented code block parsing
-    card_html = (
-        f'<div class="stream-tweet-card">\n'
-        f'{context_html}'
-        f'  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; flex-wrap: wrap; gap: 6px;">\n'
-        f'    <span style="font-weight: 700; color: #0284C7; font-size: 0.95rem;">\n'
-        f'      @{u_id} <span style="color: #64748B; font-weight: 400; font-size: 0.85rem;">• {ts_str}</span>\n'
-        f'    </span>\n'
-        f'    <div style="display: flex; align-items: center; flex-wrap: wrap; gap: 4px;">\n'
-        f'      <span class="badge-sentiment {row_b_class}">{row_s_lbl.upper()} ({row_s_scr:.2f})</span>\n'
-        f'      <span class="badge-sentiment badge-neu" style="margin-left: 4px;">Emotion: {row_e_lbl.upper()} ({row_e_scr:.2f})</span>\n'
-        f'      {row_irony_html}\n'
-        f'    </div>\n'
-        f'  </div>\n'
-        f'  <div style="color: #1E293B; font-size: 0.95rem; line-height: 1.45; background: #FFFFFF; padding: 10px 14px; border-radius: 8px; border: 1px solid #E2E8F0;">\n'
-        f'    "{clean_text}"\n'
-        f'  </div>\n'
-        f'{trends_html}'
-        f'</div>'
-    )
+    # Build card HTML as a single line with no leading indentation and no blank lines
+    card_pieces = [
+        '<div class="stream-tweet-card">',
+        context_html,
+        '<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; flex-wrap: wrap; gap: 6px;">',
+        f'<span style="font-weight: 700; color: #0284C7; font-size: 0.95rem;">@{u_id} <span style="color: #64748B; font-weight: 400; font-size: 0.85rem;">• {ts_str}</span></span>',
+        '<div style="display: flex; align-items: center; flex-wrap: wrap; gap: 4px;">',
+        f'<span class="badge-sentiment {row_b_class}">{row_s_lbl.upper()} ({row_s_scr:.2f})</span>',
+        f'<span class="badge-sentiment badge-neu" style="margin-left: 4px;">Emotion: {row_e_lbl.upper()} ({row_e_scr:.2f})</span>',
+        row_irony_html,
+        '</div>',
+        '</div>',
+        '<div style="color: #1E293B; font-size: 0.95rem; line-height: 1.45; background: #FFFFFF; padding: 10px 14px; border-radius: 8px; border: 1px solid #E2E8F0;">',
+        f'"{clean_text}"',
+        '</div>',
+        trends_html,
+        '</div>',
+    ]
+    card_html = "".join(line.strip() for line in "".join(card_pieces).splitlines() if line.strip())
     st.markdown(card_html, unsafe_allow_html=True)
 
 
